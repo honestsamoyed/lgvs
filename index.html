@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LG VS LinkedIn Dashboard 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #e0dfd8;
+    --text: #1a1a18;
+    --muted: #7a7a72;
+    --accent: #c8001e;
+    --accent2: #1a3a2a;
+    --done: #2d6a3f;
+    --done-bg: #e8f5ec;
+    --ip: #8a4800;
+    --ip-bg: #fff3e0;
+    --plan: #1a4a8a;
+    --plan-bg: #e8f0fb;
+    --font: 'Pretendard', -apple-system, sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; min-height: 100vh; }
+
+  /* Layout */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar { width: 220px; background: var(--accent2); color: #fff; padding: 0; flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
+  .main { margin-left: 220px; flex: 1; padding: 32px 36px; max-width: 1200px; }
+
+  /* Sidebar */
+  .logo { padding: 28px 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .logo-title { font-size: 11px; font-family: var(--mono); letter-spacing: 0.12em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 4px; }
+  .logo-name { font-size: 16px; font-weight: 600; color: #fff; line-height: 1.3; }
+  .logo-year { display: inline-block; margin-top: 6px; font-size: 11px; font-family: var(--mono); background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 3px; }
+  .nav { padding: 16px 12px; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.65); font-size: 13px; transition: all 0.15s; margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; }
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 500; }
+  .nav-item i { font-size: 17px; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; font-family: var(--mono); padding: 2px 7px; border-radius: 10px; }
+  .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(255,255,255,0.4); font-family: var(--mono); }
+  .update-time { color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+  /* Page header */
+  .page-header { margin-bottom: 28px; }
+  .page-title { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+  .page-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: var(--mono); }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Metric cards */
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .metric-card.total::before { background: var(--text); }
+  .metric-card.done::before { background: var(--done); }
+  .metric-card.ip::before { background: #e07b00; }
+  .metric-card.avg::before { background: var(--accent); }
+  .metric-label { font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .metric-value { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+  .metric-sub { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: var(--mono); }
+
+  /* Charts row */
+  .charts-row { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; margin-bottom: 28px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-title { font-size: 12px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+  /* Table */
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-toolbar { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .table-toolbar select, .table-toolbar input { font-family: var(--font); font-size: 12px; padding: 7px 12px; border-radius: 7px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
+  .table-toolbar input { flex: 1; min-width: 160px; }
+  .table-toolbar select:focus, .table-toolbar input:focus { border-color: var(--accent2); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 11px 16px; font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); background: var(--surface2); font-weight: 400; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-family: var(--mono); padding: 3px 9px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+  .badge-done { background: var(--done-bg); color: var(--done); }
+  .badge-ip { background: var(--ip-bg); color: var(--ip); }
+  .badge-plan { background: var(--plan-bg); color: var(--plan); }
+  .badge-none { background: var(--surface2); color: var(--muted); }
+  .badge-ad { background: #fde8e8; color: #a01010; font-size: 10px; padding: 2px 6px; }
+
+  /* Progress */
+  .prog-wrap { min-width: 100px; }
+  .prog-bar { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-bottom: 3px; }
+  .prog-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+  .prog-label { font-size: 10px; font-family: var(--mono); color: var(--muted); }
+
+  /* Steps dots */
+  .steps { display: flex; gap: 3px; }
+  .step { width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 600; }
+  .step-on { background: var(--done-bg); color: var(--done); }
+  .step-off { background: var(--surface2); color: var(--muted); }
+
+  /* Alert cards */
+  .alert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; transition: box-shadow 0.15s; }
+  .alert-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .alert-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--ip-bg); color: var(--ip); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+  .alert-body { flex: 1; min-width: 0; }
+  .alert-title { font-weight: 500; font-size: 13px; margin-bottom: 6px; }
+  .alert-next { font-size: 12px; color: var(--ip); font-family: var(--mono); margin-top: 6px; padding: 5px 10px; background: var(--ip-bg); border-radius: 5px; display: inline-block; }
+  .alert-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+
+  /* Calendar */
+  .cal-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .cal-nav-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); font-size: 16px; }
+  .cal-nav-btn:hover { background: var(--surface2); }
+  .cal-title { font-size: 18px; font-weight: 600; }
+  .cal-legend { display: flex; gap: 14px; margin-bottom: 14px; font-size: 11px; font-family: var(--mono); color: var(--muted); }
+  .cal-legend span { display: flex; align-items: center; gap: 5px; }
+  .cal-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; }
+  .cal-head { text-align: center; font-size: 11px; font-family: var(--mono); color: var(--muted); padding: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .cal-cell { min-height: 80px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+  .cal-cell.empty { background: transparent; border-color: transparent; }
+  .cal-cell.today { border-color: var(--accent); }
+  .cal-day-num { font-size: 12px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+  .cal-cell.today .cal-day-num { color: var(--accent); font-weight: 600; }
+  .cal-evt { font-size: 10px; padding: 2px 5px; border-radius: 3px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); }
+  .cal-evt.done { background: var(--done-bg); color: var(--done); }
+  .cal-evt.inprog { background: var(--ip-bg); color: var(--ip); }
+  .cal-evt.plan { background: var(--plan-bg); color: var(--plan); }
+  .cal-more { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+
+  /* Report */
+  .month-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+  .month-tab { font-size: 12px; font-family: var(--mono); padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.15s; }
+  .month-tab:hover { border-color: var(--accent2); color: var(--accent2); }
+  .month-tab.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .report-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .report-card-title { font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+  .type-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 12px; }
+  .type-name { width: 80px; flex-shrink: 0; font-family: var(--mono); }
+  .type-bar-wrap { flex: 1; }
+  .type-bar { height: 8px; border-radius: 4px; }
+  .type-count { width: 24px; text-align: right; font-family: var(--mono); color: var(--muted); }
+  .report-list { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+  /* URL link */
+  a.li-link { color: var(--plan); text-decoration: none; display: inline-flex; align-items: center; gap: 3px; font-size: 12px; }
+  a.li-link:hover { text-decoration: underline; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 60px; color: var(--muted); font-family: var(--mono); font-size: 13px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-title">LG Electronics VS</div>
+      <div class="logo-name">LinkedIn<br>Dashboard</div>
+      <div class="logo-year">2026</div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" onclick="switchTab('dashboard',this)">
+        <i class="ti ti-layout-dashboard"></i> 대시보드
+      </button>
+      <button class="nav-item" onclick="switchTab('alerts',this)">
+        <i class="ti ti-bell"></i> In-progress
+        <span class="nav-badge" id="ip-count">—</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('calendar',this)">
+        <i class="ti ti-calendar"></i> 캘린더
+      </button>
+      <button class="nav-item" onclick="switchTab('report',this)">
+        <i class="ti ti-chart-bar"></i> 월별 리포트
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div>데이터 소스: posts.json</div>
+      <div class="update-time" id="update-time">로딩 중...</div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Dashboard -->
+    <div id="tab-dashboard" class="panel active">
+      <div class="page-header">
+        <div class="page-title">운영 현황 대시보드</div>
+        <div class="page-sub">LG Vehicle Solution Global · LinkedIn Channel · 2026</div>
+      </div>
+      <div class="metric-grid" id="metrics"><div class="loading">데이터 로딩 중...</div></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">콘텐츠 타입</div>
+          <div id="legend-type" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;font-size:11px;font-family:var(--mono);color:var(--muted);"></div>
+          <div style="position:relative;height:180px;"><canvas id="typeChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">월별 포스팅 현황</div>
+          <div style="display:flex;gap:12px;margin-bottom:12px;font-size:11px;font-family:var(--mono);">
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#2d6a3f;display:inline-block;"></span>완료</span>
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#e07b00;display:inline-block;"></span>진행중</span>
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#1a4a8a;display:inline-block;"></span>예정</span>
+          </div>
+          <div style="position:relative;height:180px;"><canvas id="monthChart"></canvas></div>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-toolbar">
+          <select id="f-month" onchange="renderTable()">
+            <option value="all">전체 월</option>
+          </select>
+          <select id="f-status" onchange="renderTable()">
+            <option value="all">전체 상태</option>
+            <option value="Completed">Completed</option>
+            <option value="In-progress">In-progress</option>
+            <option value="">기획예정</option>
+          </select>
+          <select id="f-type" onchange="renderTable()">
+            <option value="all">전체 타입</option>
+            <option value="Video">Video</option>
+            <option value="IMG">IMG</option>
+            <option value="Mention">Mention</option>
+            <option value="Newsletter">Newsletter</option>
+          </select>
+          <input type="text" id="f-search" placeholder="제목 검색..." oninput="renderTable()">
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:36px">#</th>
+                <th style="width:48px">월</th>
+                <th>포스팅 제목</th>
+                <th style="width:80px">타입</th>
+                <th style="width:50px">광고</th>
+                <th style="width:120px">진행 단계</th>
+                <th style="width:100px">완성도</th>
+                <th style="width:88px">상태</th>
+                <th style="width:44px">링크</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div id="tab-alerts" class="panel">
+      <div class="page-header">
+        <div class="page-title">In-progress 포스팅</div>
+        <div class="page-sub">다음 액션이 필요한 항목</div>
+      </div>
+      <div id="alerts-list"></div>
+    </div>
+
+    <!-- Calendar -->
+    <div id="tab-calendar" class="panel">
+      <div class="page-header" style="margin-bottom:16px;">
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+          <div class="cal-title" id="cal-title"></div>
+          <button class="cal-nav-btn" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="cal-legend">
+        <span><span class="cal-legend-dot" style="background:var(--done-bg);border:1px solid var(--done);"></span>완료</span>
+        <span><span class="cal-legend-dot" style="background:var(--ip-bg);border:1px solid #e07b00;"></span>진행중</span>
+        <span><span class="cal-legend-dot" style="background:var(--plan-bg);border:1px solid var(--plan);"></span>예정</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- Report -->
+    <div id="tab-report" class="panel">
+      <div class="page-header">
+        <div class="page-title">월별 리포트</div>
+        <div class="page-sub">월 선택 시 자동 생성</div>
+      </div>
+      <div class="month-tabs" id="month-tabs"></div>
+      <div id="report-body"></div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const MONTH_ORDER = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTH_KR = {Jan:"1월",Feb:"2월",Mar:"3월",Apr:"4월",May:"5월",Jun:"6월",Jul:"7월",Aug:"8월",Sep:"9월",Oct:"10월",Nov:"11월",Dec:"12월"};
+const STEP_LABELS = ["기획제안","제작","1st Draft","Feedback","2nd Review","Final"];
+const TYPE_COLORS = {Video:"#2d6a3f",IMG:"#7c3aed",Mention:"#1a4a8a",Newsletter:"#c8001e"};
+const TYPE_BG = {Video:"#e8f5ec",IMG:"#f3eeff",Mention:"#e8f0fb",Newsletter:"#fde8e8"};
+
+let posts = [];
+let calMonth = new Date().getMonth();
+let calYear = 2026;
+let typeChartInstance, monthChartInstance;
+
+async function loadData() {
+  try {
+    const r = await fetch('posts.json?t=' + Date.now());
+    posts = await r.json();
+    document.getElementById('update-time').textContent = '업데이트: ' + new Date().toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    init();
+  } catch(e) {
+    document.getElementById('update-time').textContent = '로드 실패';
+    console.error(e);
+  }
+}
+
+function init() {
+  renderMetrics();
+  renderCharts();
+  buildFilterOptions();
+  renderTable();
+  renderAlerts();
+  renderCalendar();
+  renderMonthTabs();
+}
+
+function renderMetrics() {
+  const total = posts.length;
+  const done = posts.filter(p=>p.status==="Completed").length;
+  const ip = posts.filter(p=>p.status==="In-progress").length;
+  const avgPct = Math.round(posts.reduce((a,b)=>a+b.pct,0)/total*100);
+  document.getElementById('ip-count').textContent = ip;
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric-card total"><div class="metric-label">전체 포스팅</div><div class="metric-value">${total}</div><div class="metric-sub">2026 YTD</div></div>
+    <div class="metric-card done"><div class="metric-label">완료</div><div class="metric-value" style="color:var(--done)">${done}</div><div class="metric-sub">${Math.round(done/total*100)}% 달성률</div></div>
+    <div class="metric-card ip"><div class="metric-label">진행중</div><div class="metric-value" style="color:var(--ip)">${ip}</div><div class="metric-sub">액션 필요</div></div>
+    <div class="metric-card avg"><div class="metric-label">평균 완성도</div><div class="metric-value" style="color:var(--accent)">${avgPct}%</div><div class="metric-sub">전체 기준</div></div>
+  `;
+}
+
+function renderCharts() {
+  const types = {};
+  posts.forEach(p=>{ if(p.type) types[p.type]=(types[p.type]||0)+1; });
+
+  // Type donut
+  const typeKeys = Object.keys(types);
+  if(typeChartInstance) typeChartInstance.destroy();
+  // Legend
+  document.getElementById('legend-type').innerHTML = typeKeys.map(t=>`
+    <span style="display:flex;align-items:center;gap:4px;">
+      <span style="width:10px;height:10px;border-radius:2px;background:${TYPE_COLORS[t]||'#888'};display:inline-block;"></span>${t} ${types[t]}
+    </span>`).join('');
+  typeChartInstance = new Chart(document.getElementById('typeChart'),{
+    type:'doughnut',
+    data:{labels:typeKeys,datasets:[{data:typeKeys.map(t=>types[t]),backgroundColor:typeKeys.map(t=>TYPE_COLORS[t]||'#888'),borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'70%'}
+  });
+
+  // Month bar
+  const months = [...new Set(posts.map(p=>p.month))].sort((a,b)=>MONTH_ORDER.indexOf(a)-MONTH_ORDER.indexOf(b));
+  const done = months.map(m=>posts.filter(p=>p.month===m&&p.status==="Completed").length);
+  const ip = months.map(m=>posts.filter(p=>p.month===m&&p.status==="In-progress").length);
+  const plan = months.map(m=>posts.filter(p=>p.month===m&&!p.status&&p.pct===0).length);
+  if(monthChartInstance) monthChartInstance.destroy();
+  monthChartInstance = new Chart(document.getElementById('monthChart'),{
+    type:'bar',
+    data:{
+      labels:months.map(m=>MONTH_KR[m]||m),
+      datasets:[
+        {label:'완료',data:done,backgroundColor:'#2d6a3f',stack:'s',borderRadius:3},
+        {label:'진행중',data:ip,backgroundColor:'#e07b00',stack:'s',borderRadius:0},
+        {label:'예정',data:plan,backgroundColor:'#1a4a8a',stack:'s',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11},autoSkip:false}},y:{ticks:{font:{size:11},stepSize:5},grid:{color:'rgba(0,0,0,0.04)'}}}}
+  });
+}
+
+function buildFilterOptions() {
+  const months = [...new Set(posts.map(p=>p.month))].sort((a,b)=>MONTH_ORDER.indexOf(a)-MONTH_ORDER.indexOf(b));
+  const sel = document.getElementById('f-month');
+  months.forEach(m=>{
+    const o = document.createElement('option');
+    o.value = m; o.textContent = MONTH_KR[m]||m;
+    sel.appendChild(o);
+  });
+}
+
+function pctColor(p) {
+  if(p>=1) return 'var(--done)';
+  if(p>=0.5) return '#e07b00';
+  return 'var(--accent)';
+}
+
+function renderTable() {
+  const mo = document.getElementById('f-month').value;
+  const st = document.getElementById('f-status').value;
+  const ty = document.getElementById('f-type').value;
+  const q = document.getElementById('f-search').value.toLowerCase();
+  const filtered = posts.filter(p=>{
+    if(mo!=='all'&&p.month!==mo) return false;
+    if(st!=='all'&&p.status!==st) return false;
+    if(ty!=='all'&&p.type!==ty) return false;
+    if(q&&!p.title.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('table-body').innerHTML = filtered.map(p=>{
+    const pct = Math.round(p.pct*100);
+    const stepDots = (p.steps||[0,0,0,0,0,0]).map(s=>`<span class="step ${s?'step-on':'step-off'}" title="${STEP_LABELS[0]}">${s?'✓':'·'}</span>`).join('');
+    const statusBadge = p.status==="Completed"?'<span class="badge badge-done">완료</span>':
+      p.status==="In-progress"?'<span class="badge badge-ip">진행중</span>':
+      p.pct===0&&!p.status?'<span class="badge badge-plan">기획예정</span>':'<span class="badge badge-none">—</span>';
+    return `<tr>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${p.no}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${MONTH_KR[p.month]||p.month}</td>
+      <td style="font-size:12px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title}</td>
+      <td><span class="badge" style="background:${TYPE_BG[p.type]||'#eee'};color:${TYPE_COLORS[p.type]||'#555'}">${p.type}</span></td>
+      <td>${p.ad?`<span class="badge badge-ad">${p.ad}</span>`:'—'}</td>
+      <td><div class="steps">${stepDots}</div></td>
+      <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pctColor(p.pct)}"></div></div><div class="prog-label">${pct}%</div></div></td>
+      <td>${statusBadge}</td>
+      <td>${p.url?`<a href="${p.url}" class="li-link" target="_blank"><i class="ti ti-external-link" style="font-size:14px"></i></a>`:'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAlerts() {
+  const items = posts.filter(p=>p.status==="In-progress"||(p.pct===0&&!p.status&&p.title));
+  document.getElementById('alerts-list').innerHTML = items.map(p=>{
+    const pct = Math.round(p.pct*100);
+    const steps = (p.steps||[0,0,0,0,0,0]).map((s,i)=>`<span class="step ${s?'step-on':'step-off'}" title="${STEP_LABELS[i]}">${s?'✓':'·'}</span>`).join('');
+    return `<div class="alert-card">
+      <div class="alert-icon"><i class="ti ti-clock-edit"></i></div>
+      <div class="alert-body">
+        <div class="alert-meta">
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${MONTH_KR[p.month]} #${p.no}</span>
+          <span class="badge" style="background:${TYPE_BG[p.type]||'#eee'};color:${TYPE_COLORS[p.type]||'#555'}">${p.type}</span>
+          ${p.ad?`<span class="badge badge-ad">${p.ad}</span>`:''}
+        </div>
+        <div class="alert-title">${p.title}</div>
+        <div class="steps" style="margin-bottom:8px">${steps}</div>
+        <div class="prog-wrap" style="max-width:200px"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pctColor(p.pct)}"></div></div><div class="prog-label">${pct}% 완료</div></div>
+        ${p.nextStep?`<div class="alert-next">→ ${p.nextStep}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCalendar() {
+  document.getElementById('cal-title').textContent = `${calYear}년 ${calMonth+1}월`;
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const today = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  const abbr = MONTH_ORDER[calMonth];
+  const mp = posts.filter(p=>p.month===abbr);
+
+  // Distribute posts across days (1 post = 1 day slot for visual purposes)
+  const dayMap = {};
+  mp.forEach((p,i)=>{
+    const d = (i%daysInMonth)+1;
+    if(!dayMap[d]) dayMap[d]=[];
+    dayMap[d].push(p);
+  });
+
+  let html = days.map(d=>`<div class="cal-head">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++) html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++) {
+    const isToday = today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const dayPosts = dayMap[d]||[];
+    const evts = dayPosts.slice(0,2).map(p=>{
+      const cls = p.status==="Completed"?"done":p.status==="In-progress"?"inprog":"plan";
+      return `<div class="cal-evt ${cls}" title="${p.title}">${p.type}</div>`;
+    }).join('');
+    const more = dayPosts.length>2?`<div class="cal-more">+${dayPosts.length-2}</div>`:'';
+    html+=`<div class="cal-cell ${isToday?'today':''}"><div class="cal-day-num">${d}</div>${evts}${more}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function changeMonth(d) {
+  calMonth = (calMonth+d+12)%12;
+  renderCalendar();
+}
+
+function renderMonthTabs() {
+  const months = [...new Set(posts.map(p=>p.month))].sort((a,b)=>MONTH_ORDER.indexOf(a)-MONTH_ORDER.indexOf(b));
+  document.getElementById('month-tabs').innerHTML = months.map((m,i)=>
+    `<button class="month-tab ${i===0?'active':''}" onclick="showReport('${m}',this)">${MONTH_KR[m]||m}</button>`
+  ).join('');
+  if(months.length) showReport(months[0], document.querySelector('.month-tab'));
+}
+
+function showReport(m, btn) {
+  document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const mp = posts.filter(p=>p.month===m);
+  const done = mp.filter(p=>p.status==="Completed").length;
+  const ip = mp.filter(p=>p.status==="In-progress").length;
+  const plan = mp.filter(p=>!p.status&&p.pct===0).length;
+  const avgPct = Math.round(mp.reduce((a,b)=>a+b.pct,0)/mp.length*100);
+  const types = {};
+  mp.forEach(p=>{ if(p.type) types[p.type]=(types[p.type]||0)+1; });
+  const maxT = Math.max(...Object.values(types));
+
+  const typeRows = Object.entries(types).sort((a,b)=>b[1]-a[1]).map(([t,c])=>`
+    <div class="type-row">
+      <span class="type-name">${t}</span>
+      <div class="type-bar-wrap"><div class="type-bar" style="width:${Math.round(c/maxT*100)}%;background:${TYPE_COLORS[t]||'#888'};height:8px;border-radius:4px;"></div></div>
+      <span class="type-count">${c}</span>
+    </div>`).join('');
+
+  const statusBadge = s => s==="Completed"?'<span class="badge badge-done">완료</span>':
+    s==="In-progress"?'<span class="badge badge-ip">진행중</span>':'<span class="badge badge-plan">예정</span>';
+
+  document.getElementById('report-body').innerHTML = `
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="report-card-title">요약</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div><div class="metric-label">전체</div><div style="font-size:28px;font-weight:600">${mp.length}</div></div>
+          <div><div class="metric-label">완료</div><div style="font-size:28px;font-weight:600;color:var(--done)">${done}</div></div>
+          <div><div class="metric-label">진행중</div><div style="font-size:28px;font-weight:600;color:var(--ip)">${ip}</div></div>
+          <div><div class="metric-label">평균완성도</div><div style="font-size:28px;font-weight:600;color:var(--accent)">${avgPct}%</div></div>
+        </div>
+      </div>
+      <div class="report-card">
+        <div class="report-card-title">콘텐츠 타입 분포</div>
+        ${typeRows}
+      </div>
+    </div>
+    <div class="report-list">
+      <table>
+        <thead><tr><th style="width:88px">상태</th><th>포스팅 제목</th><th style="width:80px">타입</th><th style="width:90px">완성도</th><th style="width:44px">링크</th></tr></thead>
+        <tbody>${mp.map(p=>{
+          const pct=Math.round(p.pct*100);
+          return `<tr>
+            <td>${statusBadge(p.status)}</td>
+            <td style="font-size:12px">${p.title}</td>
+            <td><span class="badge" style="background:${TYPE_BG[p.type]||'#eee'};color:${TYPE_COLORS[p.type]||'#555'}">${p.type}</span></td>
+            <td><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pctColor(p.pct)}"></div></div><div class="prog-label">${pct}%</div></td>
+            <td>${p.url?`<a href="${p.url}" class="li-link" target="_blank"><i class="ti ti-external-link" style="font-size:14px"></i></a>`:'—'}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Load on start, auto-refresh every 5 minutes
+loadData();
+setInterval(loadData, 5*60*1000);
+</script>
+</body>
+</html>
