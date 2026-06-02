@@ -125,7 +125,7 @@
   .cal-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
   .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; }
   .cal-head { text-align: center; font-size: 11px; font-family: var(--mono); color: var(--muted); padding: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .cal-cell { min-height: 80px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+  .cal-cell { min-height: 110px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
   .cal-cell.empty { background: transparent; border-color: transparent; }
   .cal-cell.today { border-color: var(--accent); }
   .cal-day-num { font-size: 12px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px; font-weight: 500; }
@@ -465,12 +465,17 @@ function renderCalendar() {
   const abbr = MONTH_ORDER[calMonth];
   const mp = posts.filter(p=>p.month===abbr);
 
-  // Distribute posts across days (1 post = 1 day slot for visual purposes)
+  // date 필드 기준으로 dayMap 구성 (없으면 날짜 없음 버킷)
   const dayMap = {};
-  mp.forEach((p,i)=>{
-    const d = (i%daysInMonth)+1;
-    if(!dayMap[d]) dayMap[d]=[];
-    dayMap[d].push(p);
+  const noDates = [];
+  mp.forEach(p=>{
+    if(p.date) {
+      const d = parseInt(p.date.split('-')[2], 10);
+      if(!dayMap[d]) dayMap[d]=[];
+      dayMap[d].push(p);
+    } else {
+      noDates.push(p);
+    }
   });
 
   let html = days.map(d=>`<div class="cal-head">${d}</div>`).join('');
@@ -478,13 +483,26 @@ function renderCalendar() {
   for(let d=1;d<=daysInMonth;d++) {
     const isToday = today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
     const dayPosts = dayMap[d]||[];
-    const evts = dayPosts.slice(0,2).map(p=>{
+    const evts = dayPosts.map(p=>{
       const cls = p.status==="Completed"?"done":p.status==="In-progress"?"inprog":"plan";
-      return `<div class="cal-evt ${cls}" title="${p.title}">${p.type}</div>`;
+      return `<div class="cal-evt ${cls}" title="${p.title}"><span style="opacity:0.6;margin-right:3px;font-size:9px">${p.type}</span>${p.title}</div>`;
     }).join('');
-    const more = dayPosts.length>2?`<div class="cal-more">+${dayPosts.length-2}</div>`:'';
-    html+=`<div class="cal-cell ${isToday?'today':''}"><div class="cal-day-num">${d}</div>${evts}${more}</div>`;
+    html+=`<div class="cal-cell ${isToday?'today':''}"><div class="cal-day-num">${d}</div>${evts}</div>`;
   }
+
+  // 날짜 없는 포스팅은 하단에 별도 표시
+  if(noDates.length > 0) {
+    html += `</div><div style="margin-top:16px;">
+      <div style="font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">날짜 미지정 포스팅 (${noDates.length}건)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${noDates.map(p=>{
+          const cls = p.status==="Completed"?"done":p.status==="In-progress"?"inprog":"plan";
+          return `<div class="cal-evt ${cls}" style="white-space:normal;" title="${p.title}"><span style="opacity:0.6;margin-right:3px;font-size:9px">${p.type}</span>${p.title}</div>`;
+        }).join('')}
+      </div>
+    <div style="display:none">`;  // close trick for the extra </div>
+  }
+
   document.getElementById('cal-grid').innerHTML = html;
 }
 
