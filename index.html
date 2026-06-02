@@ -244,8 +244,8 @@
           <table>
             <thead>
               <tr>
-                <th style="width:36px">#</th>
-                <th style="width:60px">월</th>
+                <th style="width:28px">#</th>
+                <th style="width:48px;white-space:nowrap">월</th>
                 <th>포스팅 제목</th>
                 <th style="width:80px">타입</th>
                 <th style="width:50px">광고</th>
@@ -422,7 +422,7 @@ function renderTable() {
       p.pct===0&&!p.status?'<span class="badge badge-plan">기획예정</span>':'<span class="badge badge-none">—</span>';
     return `<tr>
       <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${p.no}</td>
-      <td style="font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap">${MONTH_KR[p.month]||p.month}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;min-width:44px">${p.month}</td>
       <td style="font-size:12px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title}</td>
       <td><span class="badge" style="background:${TYPE_BG[p.type]||'#eee'};color:${TYPE_COLORS[p.type]||'#555'}">${p.type}</span></td>
       <td>${p.ad?`<span class="badge badge-ad">${p.ad}</span>`:'—'}</td>
