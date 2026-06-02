@@ -485,7 +485,7 @@ function renderCalendar() {
     const dayPosts = dayMap[d]||[];
     const evts = dayPosts.map(p=>{
       const cls = p.status==="Completed"?"done":p.status==="In-progress"?"inprog":"plan";
-      return `<div class="cal-evt ${cls}" title="${p.title}"><div style="opacity:0.6;font-size:9px;margin-bottom:1px">${p.type}</div><div>${p.title}</div></div>`;
+      return p.url ? `<a href="${p.url}" target="_blank" rel="noopener" style="text-decoration:none"><div class="cal-evt ${cls}" title="${p.title}" style="cursor:pointer"><div style="opacity:0.6;font-size:9px;margin-bottom:1px">${p.type}</div><div>${p.title}</div></div></a>` : `<div class="cal-evt ${cls}" title="${p.title}"><div style="opacity:0.6;font-size:9px;margin-bottom:1px">${p.type}</div><div>${p.title}</div></div>`;
     }).join('');
     html+=`<div class="cal-cell ${isToday?'today':''}"><div class="cal-day-num">${d}</div>${evts}</div>`;
   }
