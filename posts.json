@@ -1142,67 +1142,87 @@
   {
     "no": 1,
     "month": "Jun",
-    "title": "Q2 VS Townhall",
+    "title": "[TLA] Q2 VS Townhall",
     "type": "IMG",
-    "pct": 0.5,
-    "status": "In-progress",
+    "pct": 1.0,
+    "status": "Completed",
     "url": "",
     "steps": [
       1,
       1,
       1,
-      0,
-      0,
-      0
+      1,
+      1,
+      1
     ],
     "ad": "",
-    "nextStep": "VS 2차 컨펌 필요",
-    "date": "2026-06-04"
+    "nextStep": "",
+    "date": "2026-06-01"
   },
   {
     "no": 2,
     "month": "Jun",
     "title": "[LG on board 2] Expert Answer - Head Unit in the AI Era",
     "type": "IMG",
-    "pct": 0.33,
-    "status": "In-progress",
+    "pct": 1.0,
+    "status": "Completed",
     "url": "",
     "steps": [
       1,
       1,
-      0,
-      0,
-      0,
-      0
+      1,
+      1,
+      1,
+      1
     ],
     "ad": "Sponsored",
-    "nextStep": "CNX 제작 진행 중 (1차 수정 5/28)",
-    "date": "2026-06-05"
+    "nextStep": "",
+    "date": "2026-06-02"
   },
   {
     "no": 3,
     "month": "Jun",
-    "title": "LinkedIn Newsletter - Head Unit in the AI Era",
-    "type": "Newsletter",
-    "pct": 0.33,
-    "status": "In-progress",
+    "title": "LGEVU Bring Your Child to Work Day",
+    "type": "IMG",
+    "pct": 1.0,
+    "status": "Completed",
     "url": "",
     "steps": [
       1,
       1,
-      0,
-      0,
-      0,
-      0
+      1,
+      1,
+      1,
+      1
     ],
     "ad": "Sponsored",
-    "nextStep": "CNX 제작 진행 중 (1차 수정 5/28)",
-    "date": "2026-06-05"
+    "nextStep": "",
+    "date": "2026-06-03"
   },
   {
     "no": 4,
     "month": "Jun",
-    "title": "World Environment Day PR",
+    "title": "LinkedIn Newsletter - Head Unit in the AI Era",
+    "type": "Newsletter",
+    "pct": 1.0,
+    "status": "Completed",
+    "url": "",
+    "steps": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "ad": "",
+    "nextStep": "",
+    "date": "2026-06-04"
+  },
+  {
+    "no": 5,
+    "month": "Jun",
+    "title": "PCF PR",
     "type": "Mention",
     "pct": 0,
     "status": "",
@@ -1215,12 +1235,12 @@
       0,
       0
     ],
-    "ad": "",
+    "ad": "Sponsored",
     "nextStep": "기획 미착수",
     "date": "2026-06-05"
   },
   {
-    "no": 5,
+    "no": 6,
     "month": "Jun",
     "title": "[LG on board 2] Main Film Teaser",
     "type": "Video",
@@ -1236,28 +1256,8 @@
       0
     ],
     "ad": "Sponsored",
-    "nextStep": "VS 2차 리뷰 대기 (4차 수정 5/14)",
-    "date": "2026-06-10"
-  },
-  {
-    "no": 6,
-    "month": "Jun",
-    "title": "[LG on board 2] Main Film",
-    "type": "Video",
-    "pct": 0.67,
-    "status": "In-progress",
-    "url": "",
-    "steps": [
-      1,
-      1,
-      1,
-      1,
-      0,
-      0
-    ],
-    "ad": "Sponsored",
-    "nextStep": "VS 2차 리뷰 대기 (2차 수정 5/21)",
-    "date": "2026-06-12"
+    "nextStep": "4차 수정 5/14, VS 2차 리뷰 대기",
+    "date": "2026-06-09"
   },
   {
     "no": 7,
@@ -1277,10 +1277,30 @@
     ],
     "ad": "",
     "nextStep": "CNX 제작 필요",
-    "date": "2026-06-14"
+    "date": "2026-06-11"
   },
   {
     "no": 8,
+    "month": "Jun",
+    "title": "[LG on board 2] Main Film",
+    "type": "Video",
+    "pct": 0.67,
+    "status": "In-progress",
+    "url": "",
+    "steps": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      0
+    ],
+    "ad": "Sponsored",
+    "nextStep": "4차 수정 6/5 전달 예정",
+    "date": "2026-06-12"
+  },
+  {
+    "no": 9,
     "month": "Jun",
     "title": "[LG on board 2] Expert Answer - Head Unit Competitive Era",
     "type": "IMG",
@@ -1295,12 +1315,12 @@
       0,
       0
     ],
-    "ad": "Sponsored",
-    "nextStep": "CNX 제작 필요",
-    "date": "2026-06-17"
+    "ad": "",
+    "nextStep": "기획안 전달됨 (5/15), CNX 제작 필요",
+    "date": "2026-06-16"
   },
   {
-    "no": 9,
+    "no": 10,
     "month": "Jun",
     "title": "베트남 R&D 10주년",
     "type": "IMG",
@@ -1315,12 +1335,12 @@
       0,
       0
     ],
-    "ad": "",
+    "ad": "Sponsored",
     "nextStep": "CNX 제작 필요",
-    "date": "2026-06-19"
+    "date": "2026-06-18"
   },
   {
-    "no": 10,
+    "no": 11,
     "month": "Jun",
     "title": "LinkedIn Newsletter - Head Unit Competitive Era",
     "type": "Newsletter",
@@ -1340,7 +1360,7 @@
     "date": "2026-06-19"
   },
   {
-    "no": 11,
+    "no": 12,
     "month": "Jun",
     "title": "[LG on board 2] Ultraview Windshield Display Demo",
     "type": "Video",
@@ -1357,14 +1377,14 @@
     ],
     "ad": "Sponsored",
     "nextStep": "VS 기획 승인 필요",
-    "date": "2026-06-24"
+    "date": "2026-06-23"
   },
   {
-    "no": 12,
+    "no": "etc",
     "month": "Jun",
-    "title": "[LG on board 2] Wide Hover Screen Demo",
-    "type": "Video",
-    "pct": 0.17,
+    "title": "LinkedIn Profile Banner",
+    "type": "IMG",
+    "pct": 0,
     "status": "In-progress",
     "url": "",
     "steps": [
@@ -1375,8 +1395,48 @@
       0,
       0
     ],
-    "ad": "Sponsored",
-    "nextStep": "VS 기획 승인 필요",
-    "date": "2026-06-26"
+    "ad": "",
+    "nextStep": "1차 수정 6/4 전달 예정",
+    "date": ""
+  },
+  {
+    "no": "etc",
+    "month": "Jun",
+    "title": "ADA Demo Video",
+    "type": "Video",
+    "pct": 0,
+    "status": "In-progress",
+    "url": "",
+    "steps": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ad": "",
+    "nextStep": "1차 수정 6/8 전달 예정",
+    "date": ""
+  },
+  {
+    "no": "etc",
+    "month": "Jun",
+    "title": "DAM 업로드",
+    "type": "IMG",
+    "pct": 0,
+    "status": "In-progress",
+    "url": "",
+    "steps": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ad": "",
+    "nextStep": "매월 14일/말일",
+    "date": ""
   }
 ]
