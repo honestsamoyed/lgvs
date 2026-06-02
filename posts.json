@@ -1418,25 +1418,5 @@
     "ad": "",
     "nextStep": "1차 수정 6/8 전달 예정",
     "date": ""
-  },
-  {
-    "no": "etc",
-    "month": "Jun",
-    "title": "DAM 업로드",
-    "type": "IMG",
-    "pct": 0,
-    "status": "In-progress",
-    "url": "",
-    "steps": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "ad": "",
-    "nextStep": "매월 14일/말일",
-    "date": ""
   }
 ]
